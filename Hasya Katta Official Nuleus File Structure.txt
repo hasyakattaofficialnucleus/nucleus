@@ -1,0 +1,31 @@
+hasya_katta_official_nucleus/
+│
+├── arcx/               # Architecture-specific code (e.g., x86, ARM, RISC-V)
+│
+├── boot/               # Bootloader code (e.g., GRUB, UEFI)
+│
+├── drvrs/            # Hardware device drivers
+│
+├── inc/            # Header files for nucleus / nucleus code
+│
+├── libs/                # General-purpose libraries
+│
+├── nucleus/             # Core nucleus / nucleuscode (scheduler, memory management, system calls)
+│
+├── scripts/            # Build and configuration scripts
+│
+├── sys/                # Nucleus / Nucleus-specific system files
+│
+├── init/               # Nucleus / Nucleus initialization code
+│
+├── fylsys/                 # File system code
+│
+├── usr/               # User-space programs and libraries (optional)
+│
+├── tst/               # Unit tests and test data
+│
+├── README              # Project documentation
+│
+├── Makefile            # Build automation file
+│
+└── .gitignore          # Git ignore rules for version control
