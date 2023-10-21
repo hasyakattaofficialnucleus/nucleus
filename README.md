@@ -1,3 +1,3 @@
-# nucleus
+# Nucleus
 
 Hasya Katta Official Nucleus
