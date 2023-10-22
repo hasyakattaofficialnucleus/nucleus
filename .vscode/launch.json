@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "e:/nucleus/hko-k-0.0.1-20.10.2023.20.20/drvrs",
-      "program": "e:/nucleus/hko-k-0.0.1-20.10.2023.20.20/drvrs/build/Debug/outDebug",
+      "cwd": "e:/hasyakattaofficialnucleus/hko-k-0.0.1-20.10.2023.20.20/nucleus",
+      "program": "e:/hasyakattaofficialnucleus/hko-k-0.0.1-20.10.2023.20.20/nucleus/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

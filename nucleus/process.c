@@ -1,39 +1,68 @@
-// nucleus/process.c
-#include <stdint.h>
-#include "memory_protection.h"
+#include "process.h"
+#include "memory.h"
 
 #define MAX_PROCESSES 10
+#define STACK_SIZE 1024 // Adjust stack size as needed
 
-struct Process {
-    uint32_t pid;  // Process ID
-    int privilege_level;  // Privilege level (nucleus or user)
-    void (*entry_point)();  // Process entry point function
-};
+// Process control block structure
+typedef struct {
+    void* entry_point;
+    int pid; // Process ID
+    uint8_t stack[STACK_SIZE];
+    // Add more process-related data here as needed
+} ProcessControlBlock;
 
-struct Process process_table[MAX_PROCESSES];
-uint32_t next_pid = 1;  // Start at 1 to reserve 0 for the nucleus.
+// Array to store process control blocks
+static ProcessControlBlock pcb[MAX_PROCESSES];
 
-void init_process_manager() {
-    // Initialize the process manager.
-    // Create the first process (nucleus process) and add it to the table.
-    create_process(NUCLEUS_MODE, nucleus_main);
-}
+// Number of currently active processes
+static int process_count = 0;
 
-uint32_t create_process(int privilege_level, void (*entry_point)()) {
-    if (next_pid >= MAX_PROCESSES) {
-        return 0;  // Error: Maximum number of processes reached.
+// Currently running process
+static int current_process = -1;
+
+// Function to create a new process
+int create_process(void* entry_point) {
+    if (process_count < MAX_PROCESSES) {
+        ProcessControlBlock* new_process = &pcb[process_count];
+        new_process->entry_point = entry_point;
+        new_process->pid = process_count;
+        // Initialize other process-related data as needed
+
+        process_count++;
+
+        return new_process->pid;
     }
-
-    struct Process *new_process = &process_table[next_pid];
-    new_process->pid = next_pid;
-    new_process->privilege_level = privilege_level;
-    new_process->entry_point = entry_point;
-    
-    next_pid++;
-    return new_process->pid;
+    // Process creation failed
+    return -1;
 }
 
-void switch_process(uint32_t pid) {
-    // Implement task switching logic.
-    // Choose the next process to run and switch to it.
+// Function to switch to a different process
+void context_switch(int new_pid) {
+    if (new_pid < process_count) {
+        if (current_process != new_pid) {
+            // Save the context of the current process
+            if (current_process >= 0) {
+                // Implement context saving logic here
+                // Save registers, stack pointer, etc.
+            }
+
+            // Switch to the new process
+            // Implement context restoring logic here
+            // Restore registers, stack pointer, etc.
+            
+            current_process = new_pid;
+        }
+    }
+}
+
+// Multitasking scheduler
+void multitasking_scheduler() {
+    while (1) {
+        // Implement a simple round-robin scheduling algorithm
+        for (int i = 0; i < process_count; i++) {
+            int next_process = (current_process + 1) % process_count;
+            context_switch(next_process);
+        }
+    }
 }

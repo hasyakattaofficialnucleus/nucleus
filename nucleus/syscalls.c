@@ -1,50 +1,37 @@
-// nucleus/syscalls.c
-#include <stdio.h>
-#include <string.h>
+#include "syscalls.h"
 #include "process.h"
 #include "memory.h"
-#include "filesystem.h"
+#include "file_system.h" // You can include a file system module
 
-// Define system call numbers
-#define SYS_OPEN 1
-#define SYS_DELETE 2
-#define SYS_LIST 3
-#define SYS_SET_PRIVILEGE_LEVEL 4
-#define SYS_CREATE_PROCESS 5
-#define SYS_TERMINATE_PROCESS 6
-#define SYS_ALLOCATE_MEMORY 7
-#define SYS_DEALLOCATE_MEMORY 8
+// Function pointer array for system call handlers
+static syscall_handler_t syscall_table[SYSCALL_COUNT];
 
-int syscall(int syscall_number, char *arg) {
-    switch (syscall_number) {
-        case SYS_OPEN:
-            create_file(arg);
-            return 0;  // Success
-        case SYS_DELETE:
-            delete_file(arg);
-            return 0;  // Success
-        case SYS_LIST:
-            list_directory();
-            return 0;  // Success
-        case SYS_SET_PRIVILEGE_LEVEL:
-            set_privilege_level(*arg);  // arg should contain the privilege level
-            return 0;  // Success
-        case SYS_CREATE_PROCESS:
-            return create_process(USER_MODE, *arg);  // arg should contain the process entry point
-        case SYS_TERMINATE_PROCESS:
-            terminate_process(*arg);  // arg should contain the process ID
-            return 0;  // Success
-        case SYS_ALLOCATE_MEMORY:
-            return (int)allocate_memory(*arg);  // arg should contain the size
-        case SYS_DEALLOCATE_MEMORY:
-            deallocate_memory((void*)*arg);  // arg should contain the address
-            return 0;  // Success
-        case SYS_CREATE_PROCESS:
-            return create_process(arg);  // arg should contain the process entry point
-        case SYS_TERMINATE_PROCESS:
-            terminate_process(*arg);  // arg should contain the process ID
-            return 0;  // Success
-        default:
-            return -1;  // Error: Invalid system call number
+// Register a system call handler
+void register_syscall(int syscall_number, syscall_handler_t handler) {
+    if (syscall_number >= 0 && syscall_number < SYSCALL_COUNT) {
+        syscall_table[syscall_number] = handler;
     }
 }
+
+// Nucleus entry point for system calls
+int syscall_handler(int syscall_number, void* arg1, void* arg2, void* arg3) {
+    if (syscall_number >= 0 && syscall_number < SYSCALL_COUNT) {
+        syscall_handler_t handler = syscall_table[syscall_number];
+        if (handler) {
+            return handler(arg1, arg2, arg3);
+        }
+    }
+    // Invalid or unsupported system call
+    return -1;
+}
+
+// Example system call handler for opening a file
+int sys_open(void* arg1, void* arg2, void* arg3) {
+    const char* filename = (const char*)arg1;
+    // Implement file opening logic here, returning a file descriptor
+    // You can include the file system module to handle this
+    int file_descriptor = file_open(filename);
+    return file_descriptor;
+}
+
+// Add more system call handlers for read, write, close, and other operations
