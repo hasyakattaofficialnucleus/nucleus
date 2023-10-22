@@ -1,25 +1,28 @@
 #include <stdio.h>
 #include "syscalls.h"
-
-// User process entry point
-void user_process() {
-    printf("User process is running!\n");
-    // Implement some work here
-}
+#include "filesystem.h"
 
 int main() {
-    // Create multiple user processes
-    int pid1 = syscall(SYS_CREATE_PROCESS, user_process);
-    int pid2 = syscall(SYS_CREATE_PROCESS, user_process);
+    // Initialize the file system
+    init_filesystem();
 
-    if (pid1 < 0 || pid2 < 0) {
-        printf("Process creation failed\n");
-        return -1;
+    // Create a new file
+    create_file("my_file.txt");
+
+    // Write data to the file
+    const char* data_to_write = "Hello, this is my file!";
+    write_file("my_file.txt", data_to_write, strlen(data_to_write));
+
+    // Read data from the file
+    char data_read[1024];
+    int read_size = read_file("my_file.txt", data_read, sizeof(data_read));
+
+    if (read_size > 0) {
+        data_read[read_size] = '\0'; // Null-terminate for printing
+        printf("Read from file: %s\n", data_read);
+    } else {
+        printf("Error reading file.\n");
     }
-
-    // Run the multitasking scheduler
-    syscall(SYS_SET_PRIVILEGE_LEVEL, KERNEL_MODE);
-    multitasking_scheduler();
 
     return 0;
 }
