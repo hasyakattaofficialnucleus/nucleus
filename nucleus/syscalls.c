@@ -1,5 +1,5 @@
 #include "syscall.h"
-#include "filesystem.h"
+#include "process.h"
 
 // Handle system calls
 int handle_syscall(int syscall_num, int param1, int param2, int param3) {
@@ -7,19 +7,13 @@ int handle_syscall(int syscall_num, int param1, int param2, int param3) {
 
     switch (syscall_num) {
         case SYS_OPEN:
-            result = open_file((char*)param1);
+            // Handle open file system call
             break;
 
-        case SYS_READ:
-            result = read_file(param1, (char*)param2, param3);
-            break;
-
-        case SYS_WRITE:
-            result = write_file(param1, (char*)param2, param3);
-            break;
-
-        case SYS_CLOSE:
-            result = close_file(param1);
+        case SYS_CREATE_PROCESS:
+            // Handle process creation system call
+            // For simplicity, we'll assume 'param1' is a function pointer
+            result = create_process((void (*)())param1);
             break;
 
         // Add more system calls as needed
