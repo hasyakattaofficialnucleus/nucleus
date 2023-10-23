@@ -1,71 +1,55 @@
 #include "filesystem.h"
 
-#define MAX_FILES 100
-#define MAX_FILENAME_LENGTH 32
-#define MAX_FILE_SIZE 1024
-
-// File structure
-typedef struct {
-    char filename[MAX_FILENAME_LENGTH];
-    char data[MAX_FILE_SIZE];
+// Example file system structures
+struct file {
+    char name[256];
+    char data[1024];
     int size;
-} File;
+    int is_open;
+};
 
-// File system structure
-typedef struct {
-    File files[MAX_FILES];
-    int file_count;
-} FileSystem;
+struct file file_table[16];
 
-// Global file system instance
-static FileSystem file_system;
-
-// Initialize the file system
-void init_filesystem() {
-    file_system.file_count = 0;
-}
-
-// Create a new file
-int create_file(const char* filename) {
-    if (file_system.file_count < MAX_FILES) {
-        File* new_file = &file_system.files[file_system.file_count];
-        strncpy(new_file->filename, filename, MAX_FILENAME_LENGTH);
-        new_file->size = 0;
-        file_system.file_count++;
-        return 0; // File created successfully
-    }
-    return -1; // File system full
-}
-
-// Write data to a file
-int write_file(const char* filename, const char* data, int size) {
-    for (int i = 0; i < file_system.file_count; i++) {
-        File* file = &file_system.files[i];
-        if (strcmp(file->filename, filename) == 0) {
-            if (size <= MAX_FILE_SIZE) {
-                strncpy(file->data, data, size);
-                file->size = size;
-                return 0; // Data written successfully
-            } else {
-                return -1; // Data too large for the file
-            }
+// Open a file
+int open_file(const char* filename) {
+    for (int i = 0; i < 16; i++) {
+        if (file_table[i].is_open == 0) {
+            strcpy(file_table[i].name, filename);
+            file_table[i].size = 0;
+            file_table[i].is_open = 1;
+            return i;  // Return the file descriptor
         }
     }
-    return -2; // File not found
+    return -1;  // No available file descriptors
 }
 
-// Read data from a file
-int read_file(const char* filename, char* data, int max_size) {
-    for (int i = 0; i < file_system.file_count; i++) {
-        File* file = &file_system.files[i];
-        if (strcmp(file->filename, filename) == 0) {
-            if (file->size <= max_size) {
-                strncpy(data, file->data, file->size);
-                return file->size; // Data read successfully
-            } else {
-                return -1; // Buffer too small for the data
-            }
-        }
+// Read from a file
+int read_file(int fd, char* buffer, int count) {
+    if (fd >= 0 && fd < 16 && file_table[fd].is_open) {
+        // Implement file reading logic here
+        // Copy 'count' bytes from the file to 'buffer'
+        // Update the file position
+        return count;  // Return the number of bytes read
     }
-    return -2; // File not found
+    return -1;  // File not open or invalid file descriptor
+}
+
+// Write to a file
+int write_file(int fd, const char* buffer, int count) {
+    if (fd >= 0 && fd < 16 && file_table[fd].is_open) {
+        // Implement file writing logic here
+        // Write 'count' bytes from 'buffer' to the file
+        // Update the file size and position
+        return count;  // Return the number of bytes written
+    }
+    return -1;  // File not open or invalid file descriptor
+}
+
+// Close a file
+int close_file(int fd) {
+    if (fd >= 0 && fd < 16 && file_table[fd].is_open) {
+        file_table[fd].is_open = 0;
+        return 0;  // File closed successfully
+    }
+    return -1;  // File not open or invalid file descriptor
 }

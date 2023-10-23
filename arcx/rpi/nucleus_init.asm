@@ -1,7 +1,10 @@
-global nucleus_init
+.global nucleus_init
 
 nucleus_init:
     @ Initialize hardware and data structures
     @ Set up interrupt vectors, memory management, etc.
-    @ This code will vary depending on your hardware and architecture.
-    ret
+
+    @ Example: Initialize hardware specific to Raspberry Pi
+    @ Implement RPI-specific initialization here
+
+    bx lr

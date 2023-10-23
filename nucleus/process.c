@@ -1,68 +1,51 @@
 #include "process.h"
-#include "memory.h"
 
-#define MAX_PROCESSES 10
-#define STACK_SIZE 1024 // Adjust stack size as needed
+// Example process control block (PCB) structure
+struct pcb {
+    int pid;         // Process ID
+    int state;       // Process state (e.g., running, blocked, terminated)
+    int priority;    // Process priority
+    int program_counter;  // Program counter (instruction pointer)
+    // Add more fields as needed
+};
 
-// Process control block structure
-typedef struct {
-    void* entry_point;
-    int pid; // Process ID
-    uint8_t stack[STACK_SIZE];
-    // Add more process-related data here as needed
-} ProcessControlBlock;
+struct pcb process_table[16];  // Array to store PCBs
 
-// Array to store process control blocks
-static ProcessControlBlock pcb[MAX_PROCESSES];
+int current_pid = 0;  // Current process ID
 
-// Number of currently active processes
-static int process_count = 0;
-
-// Currently running process
-static int current_process = -1;
-
-// Function to create a new process
-int create_process(void* entry_point) {
-    if (process_count < MAX_PROCESSES) {
-        ProcessControlBlock* new_process = &pcb[process_count];
-        new_process->entry_point = entry_point;
-        new_process->pid = process_count;
-        // Initialize other process-related data as needed
-
-        process_count++;
-
-        return new_process->pid;
+// Initialize process management
+void init_process_manager() {
+    for (int i = 0; i < 16; i++) {
+        process_table[i].pid = -1;  // Mark PCB as unused
+        process_table[i].state = 0; // Initialize process state
+        process_table[i].priority = 0;  // Initialize priority
+        process_table[i].program_counter = 0;  // Initialize program counter
+        // Initialize other fields as needed
     }
-    // Process creation failed
-    return -1;
 }
 
-// Function to switch to a different process
-void context_switch(int new_pid) {
-    if (new_pid < process_count) {
-        if (current_process != new_pid) {
-            // Save the context of the current process
-            if (current_process >= 0) {
-                // Implement context saving logic here
-                // Save registers, stack pointer, etc.
+// Example system call for process creation
+int create_process(void (*entry_point)()) {
+    if (current_pid < 16) {
+        // Find an available PCB
+        int i;
+        for (i = 0; i < 16; i++) {
+            if (process_table[i].pid == -1) {
+                break;
             }
+        }
 
-            // Switch to the new process
-            // Implement context restoring logic here
-            // Restore registers, stack pointer, etc.
-            
-            current_process = new_pid;
+        if (i < 16) {
+            process_table[i].pid = current_pid++;
+            process_table[i].state = 1;  // Set process state to "running"
+            // Set up process context and stack
+            // Implement process creation and context switching here
+            // For simplicity, we'll assume the entry point is a function with no arguments
+            entry_point();
+            // Note: A real implementation would save and restore the CPU context
+            // and set up a stack for the new process
+            return process_table[i].pid;
         }
     }
-}
-
-// Multitasking scheduler
-void multitasking_scheduler() {
-    while (1) {
-        // Implement a simple round-robin scheduling algorithm
-        for (int i = 0; i < process_count; i++) {
-            int next_process = (current_process + 1) % process_count;
-            context_switch(next_process);
-        }
-    }
+    return -1;  // Process creation failed
 }
