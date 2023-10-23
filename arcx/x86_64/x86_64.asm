@@ -1,21 +1,32 @@
-BITS 64
-section .text
-global _start
+section .boot
+    global _start
 
 _start:
-    ; Bootloader code here
+    mov esp, stack_top       ; Set up the stack pointer
 
-    ; Load nucleus from disk into memory
-    mov ah, 0x02       ; BIOS read sector function
-    mov al, 1          ; Number of sectors to read
-    mov ch, 0x00       ; Cylinder 0
-    mov dh, 0x00       ; Head 0
-    mov dl, 0x80       ; Drive 0 (usually the boot drive)
-    mov rsi, 0x1000    ; Load into memory address 0x1000
-    int 0x13           ; Call BIOS interrupt
+    ; Load the nucleus from disk to memory
+    mov ah, 0x02             ; BIOS read sector function
+    mov al, 1                ; Number of sectors to read
+    mov ch, 0x00             ; Cylinder
+    mov dh, 0x00             ; Head
+    mov cl, 0x02             ; Sector (1-based)
+    mov bx, nucleus_buffer    ; Buffer address
+    int 0x13                 ; BIOS interrupt for disk I/O
 
     ; Jump to the loaded nucleus
-    jmp 0x1000
+    mov rsp, nucleus_buffer   ; Set stack pointer
+    call nucleus_entry        ; Call the nucleus's entry point
 
-times 510 - ($ - $$) db 0
-dw 0xaa55
+    ; Infinite loop
+.loop:
+    hlt
+    jmp .loop
+
+section .bss
+    resb 510 - ($ - $$)       ; Fill the boot sector to 510 bytes
+    dw 0xAA55                 ; Boot signature
+
+section .data
+stack_top equ 0x7C00        ; Stack top address
+nucleus_buffer equ 0x8000    ; Address to load the nucleus
+nucleus_entry equ 0x8000     ; Entry point of the nucleus

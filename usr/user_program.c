@@ -1,27 +1,17 @@
 #include <stdio.h>
 #include "syscalls.h"
-#include "filesystem.h"
 
 int main() {
-    // Initialize the file system
-    init_filesystem();
+    TimeInfo time_info;
 
-    // Create a new file
-    create_file("my_file.txt");
+    // Request the current time and date from the system
+    int result = syscall(SYS_GET_TIME, &time_info);
 
-    // Write data to the file
-    const char* data_to_write = "Hello, this is my file!";
-    write_file("my_file.txt", data_to_write, strlen(data_to_write));
-
-    // Read data from the file
-    char data_read[1024];
-    int read_size = read_file("my_file.txt", data_read, sizeof(data_read));
-
-    if (read_size > 0) {
-        data_read[read_size] = '\0'; // Null-terminate for printing
-        printf("Read from file: %s\n", data_read);
+    if (result == 0) {
+        printf("Current Time: %02d:%02d:%02d\n", time_info.hour, time_info.minute, time_info.second);
+        printf("Current Date: %04d-%02d-%02d\n", time_info.year, time_info.month, time_info.day);
     } else {
-        printf("Error reading file.\n");
+        printf("Error getting time from the system.\n");
     }
 
     return 0;

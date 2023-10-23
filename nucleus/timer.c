@@ -1,16 +1,8 @@
-// nucleus/timer.c
-#include <stdint.h>
-#include "process.h"
+#include "timer.h"
 
-#define TIMER_FREQUENCY 1000 // Timer interrupt frequency in Hz
-
-void init_timer() {
-    // Initialize the timer interrupt to occur at TIMER_FREQUENCY.
-    // Set up the timer hardware or configure a timer interrupt.
-}
-
-void timer_isr() {
-    // Handle timer interrupt here.
-    // Update system time and perform task scheduling.
-    switch_process(next_process_to_run());
+// Implement the get_current_time function
+int get_current_time(TimeInfo* time_info) {
+    // Implement the logic to get the current time and date
+    // Fill in the TimeInfo structure with the current values
+    return 0; // Success
 }

@@ -3,16 +3,16 @@ global nucleus_entry
 
 nucleus_entry:
     ; Initialize the stack pointer for the nucleus
-    ldr sp, =stack_top
+    mov esp, stack_top
 
     ; Call a function to initialize the nucleus
-    bl nucleus_init
+    call nucleus_init
 
     ; Enter the main nucleus loop
-    bl main_loop
+    call main_loop
 
     ; Should never reach here; halt the CPU
-    b .
+    hlt
 
 main_loop:
     ; Implement your main nucleus loop logic here
@@ -20,9 +20,7 @@ main_loop:
 
     ; Example: Infinite loop
 .loop:
-    b .loop
+    jmp .loop
 
-section .bss
-stack_top:  .word 0
-
-section .data
+stack_top:
+    ; Define the top of the stack for the nucleus

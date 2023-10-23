@@ -1,16 +1,18 @@
 #ifndef SYSCALLS_H
 #define SYSCALLS_H
 
-#define SYSCALL_COUNT 64
+#define SYS_GET_TIME 1
 
-typedef int (*syscall_handler_t)(void*, void*, void*);
+typedef struct {
+    int year;
+    int month;
+    int day;
+    int hour;
+    int minute;
+    int second;
+} TimeInfo;
 
-// Define system call numbers
-#define SYS_OPEN 0
-#define SYS_READ 1
-#define SYS_WRITE 2
-#define SYS_CLOSE 3
-
-// Add more system call numbers as needed
+int handle_syscall(int syscall_number, void* params);
 
 #endif
+
