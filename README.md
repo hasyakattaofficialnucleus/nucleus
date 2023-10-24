@@ -14,12 +14,12 @@
 
 **First release: 20th October, 2023**
 
-Welcome to the official documentation for Hasya Katta Official Nucleus (HKO-Nucleus), version HKO-K-0.0.1-20.10.2023.20.20. HKO-Nucleus is an operating system nucleus designed for educational purposes, providing a foundation for understanding the inner workings of operating systems. This documentation will guide you through the setup, usage, and development of HKO-Nucleus. 📘
+Welcome to the official documentation for Hasya Katta Official Nucleus (HKO-Nucleus), version HKO-N-0.0.1-20.10.2023.20.20. HKO-Nucleus is an operating system nucleus designed for educational purposes, providing a foundation for understanding the inner workings of operating systems. This documentation will guide you through the setup, usage, and development of HKO-Nucleus. 📘
 
 
-## HKO-K-0.0.1-20.10.2023.20.20 🚀  
+## HKO-N-0.0.1-20.10.2023.20.20 🚀  
 
-Welcome to version **HKO-K-0.0.1-20.10.2023.20.20** of Hasya Katta Official Nucleus! 🎉
+Welcome to version **HKO-N-0.0.1-20.10.2023.20.20** of Hasya Katta Official Nucleus! 🎉
 
 This release includes core functionality for process management, system calls, and I/O. It's a significant step in the development of Hasya Katta Official Nucleus, bringing you closer to understanding the inner workings of operating systems. 🧠
 
@@ -49,7 +49,7 @@ For more detailed information and instructions on using this version, please ref
 12. [Troubleshooting](#12-troubleshooting)
 
 ## 1. Introduction 🌟
-Welcome to the documentation for Hasya Katta Official Nucleus (HKO-Nucleus), version HKO-K-0.0.1-20.10.2023. HKO-Nucleus is an operating system nucleus designed for educational purposes, providing a foundation for understanding the inner workings of operating systems. This documentation will guide you through the setup, usage, and development of HKO-Nucleus. 🎓
+Welcome to the documentation for Hasya Katta Official Nucleus (HKO-Nucleus), version HKO-N-0.0.1-20.10.2023. HKO-Nucleus is an operating system nucleus designed for educational purposes, providing a foundation for understanding the inner workings of operating systems. This documentation will guide you through the setup, usage, and development of HKO-Nucleus. 🎓
 
 ## 2. Nucleus Overview 💡
 HKO-Nucleus is a simple, minimalistic nucleus that demonstrates core concepts of operating system development, such as process management, system calls, and basic I/O. It is not intended for production use but serves as a learning tool for nucleus development. 🧠
@@ -120,7 +120,7 @@ You can also find mirror repositories on GitLab: GitLab, GitLab Hasya Katta Offi
 HKO-Nucleus is provided under the MIT License. You are free to use, modify, and distribute the code as per the terms of this license. 🆓
 
 ## 11. Version History 📅
-- **HKO-K-0.0.1-20.10.2023.20.20**
+- **HKO-N-0.0.1-20.10.2023.20.20**
   - Initial release
   - Core functionality for process management, system calls, and I/O
 
